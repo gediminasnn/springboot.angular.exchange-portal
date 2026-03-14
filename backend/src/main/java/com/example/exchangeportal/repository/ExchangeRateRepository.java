@@ -10,6 +10,8 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.springframework.lang.NonNull;
+
 @Repository
 public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long> {
     /**
@@ -19,7 +21,8 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long
      * @return A list of exchange rates matching the criteria.
      */
     @Query("SELECT er FROM ExchangeRate er WHERE er.date = (SELECT MAX(er2.date) FROM ExchangeRate er2)")
-    List<ExchangeRate> findAllWithLatestDate();
+    @NonNull
+    List<ExchangeRate> findAll();
 
     /**
      * Finds all exchange rates with the given currency and within the
@@ -32,7 +35,8 @@ public interface ExchangeRateRepository extends JpaRepository<ExchangeRate, Long
      *         the specified date range.
      */
     @Query("SELECT er FROM ExchangeRate er WHERE er.currency = :currency AND er.date BETWEEN :fromDate AND :toDate")
-    List<ExchangeRate> findAllByCurrencyAndDateBetween(
+    @NonNull
+    List<ExchangeRate> findAll(
             @Param("currency") Currency currency,
             @Param("fromDate") LocalDate fromDate,
             @Param("toDate") LocalDate toDate);

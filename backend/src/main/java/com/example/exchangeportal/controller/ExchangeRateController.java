@@ -18,7 +18,7 @@ public class ExchangeRateController {
 
     @GetMapping
     public ResponseEntity<List<ExchangeRateDto>> show() {
-        List<ExchangeRateDto> exchangeRateDtos = exchangeRateService.getLatestExchangeRates();
+        List<ExchangeRateDto> exchangeRateDtos = exchangeRateService.get();
         return new ResponseEntity<>(exchangeRateDtos, HttpStatus.OK);
     }
 }

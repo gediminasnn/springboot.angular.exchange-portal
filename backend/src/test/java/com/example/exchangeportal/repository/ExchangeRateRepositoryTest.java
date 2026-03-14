@@ -21,7 +21,7 @@ public class ExchangeRateRepositoryTest {
     private ExchangeRateRepository exchangeRateRepository;
 
     @Test
-    public void findAllWithLatestDate_ShouldReturnOnlyLatestDates() {
+    public void findAll_ShouldReturnOnlyLatestDates() {
         LocalDate today = LocalDate.now();
         LocalDate yesterday = LocalDate.now().minusDays(1);
 
@@ -41,13 +41,13 @@ public class ExchangeRateRepositoryTest {
         entityManager.flush();
 
         List<ExchangeRate> expectedExchangeRates = List.of(usdExchangeRate, gbpExchangeRate);
-        List<ExchangeRate> actualExchangeRates = exchangeRateRepository.findAllWithLatestDate();
+        List<ExchangeRate> actualExchangeRates = exchangeRateRepository.findAll();
 
         assertEquals(expectedExchangeRates, actualExchangeRates);
     }
 
     @Test
-    public void findAllByCurrencyAndDateBetween_ShouldReturnExchangeRatesWithinDateRange() {
+    public void findAll_ShouldReturnExchangeRatesWithinDateRange() {
         LocalDate today = LocalDate.now();
         LocalDate startDate = today.minusDays(2);
         LocalDate endDate = today.plusDays(2);
@@ -68,7 +68,7 @@ public class ExchangeRateRepositoryTest {
         entityManager.flush();
 
         List<ExchangeRate> expectedExchangeRates = List.of(rateToday, rateYesterday, rateTomorrow);
-        List<ExchangeRate> actualExchangeRates = exchangeRateRepository.findAllByCurrencyAndDateBetween(usd, startDate,
+        List<ExchangeRate> actualExchangeRates = exchangeRateRepository.findAll(usd, startDate,
                 endDate);
 
         assertEquals(expectedExchangeRates, actualExchangeRates);

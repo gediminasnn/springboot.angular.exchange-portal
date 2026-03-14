@@ -55,7 +55,7 @@ public class CurrencyControllerTest {
 
         expectedCurrencyDto.setExchangeRates(exchangeRatesDto);
 
-        when(currencyService.getCurrencyWithExchangeRates(
+        when(currencyService.get(
                 1L,
                 LocalDate.of(2024, 5, 1),
                 LocalDate.of(2024, 5, 5)))

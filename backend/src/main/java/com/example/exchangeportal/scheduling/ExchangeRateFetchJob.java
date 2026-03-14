@@ -8,8 +8,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.exchangeportal.exception.ApiException;
-import com.example.exchangeportal.exception.ParsingException;
 import com.example.exchangeportal.service.ExchangeRateService;
 
 @Component
@@ -23,8 +21,8 @@ public class ExchangeRateFetchJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         try {
             logger.info("Exchange rates fetching started successfully");
-            exchangeRateService.fetchAndSaveExchangeRatesFromApi();
-        } catch (ApiException | ParsingException e) {
+            exchangeRateService.populate();
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
         logger.info("Exchange rates fetching finished successfully");

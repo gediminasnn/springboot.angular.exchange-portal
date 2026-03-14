@@ -1,5 +1,7 @@
 package com.example.exchangeportal.config;
 
+import java.net.http.HttpClient;
+
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -28,5 +30,10 @@ public class AppConfig {
 	@Bean
 	ModelMapper modelMapper() {
 		return new ModelMapper();
+	}
+
+	@Bean
+	HttpClient httpClient() {
+		return HttpClient.newHttpClient();
 	}
 }

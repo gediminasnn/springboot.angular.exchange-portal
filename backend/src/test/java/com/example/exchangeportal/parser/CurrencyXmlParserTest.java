@@ -1,8 +1,12 @@
 package com.example.exchangeportal.parser;
 
-import com.example.exchangeportal.entity.Currency;
-import com.example.exchangeportal.exception.FailedParsingException;
+import com.example.exchangeportal.record.CurrencyClientResponse;
+import com.example.exchangeportal.record.ParsedCurrency;
 import org.junit.jupiter.api.Test;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -17,7 +21,7 @@ class CurrencyXmlParserTest {
     }
 
     @Test
-    void testParseAll_Success() throws FailedParsingException {
+    void testParse_Success() throws ParserConfigurationException, SAXException, IOException {
         String validXml = """
                 <CcyTbl xmlns="http://www.lb.lt/WebServices/FxRates">
                     <CcyNtry>
@@ -37,11 +41,11 @@ class CurrencyXmlParserTest {
                 </CcyTbl>
                 """;
 
-        List<Currency> expectedCurrencies = List.of(
-                Currency.builder().code("AED").name("UAE dirham").minorUnits(2).build(),
-                Currency.builder().code("AFN").name("Afghani").minorUnits(2).build());
+        List<ParsedCurrency> expectedCurrencies = List.of(
+                new ParsedCurrency("AED", "UAE dirham", 2),
+                new ParsedCurrency("AFN", "Afghani", 2));
 
-        List<Currency> actualCurrencies = currencyXmlParser.parseAll(validXml);
+        List<ParsedCurrency> actualCurrencies = currencyXmlParser.parse(new CurrencyClientResponse(validXml));
         assertEquals(expectedCurrencies, actualCurrencies);
     }
 }

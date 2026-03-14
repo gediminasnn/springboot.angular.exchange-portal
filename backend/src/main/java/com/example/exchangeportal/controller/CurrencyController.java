@@ -26,7 +26,7 @@ public class CurrencyController {
             @PathVariable("id") Long id,
             @RequestParam(required = false) LocalDate fromDate,
             @RequestParam(required = false) LocalDate toDate) throws Exception {
-        CurrencyDto currencyDto = currencyService.getCurrencyWithExchangeRates(id, fromDate, toDate);
+        CurrencyDto currencyDto = currencyService.get(id, fromDate, toDate);
         return new ResponseEntity<>(currencyDto, HttpStatus.OK);
     }
 }

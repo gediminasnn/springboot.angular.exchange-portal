@@ -51,7 +51,7 @@ public class ExchangeRateControllerTest {
                 ExchangeRateDto.builder().currency(currencyUsdDto).rate(1.1).date(today).build(),
                 ExchangeRateDto.builder().currency(currencyGbpDto).rate(0.85).date(today).build());
 
-        when(exchangeRateService.getLatestExchangeRates()).thenReturn(expectedExchangeRateDtos);
+        when(exchangeRateService.get()).thenReturn(expectedExchangeRateDtos);
 
         MvcResult result = mockMvc.perform(get("/api/exchange-rates")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -70,7 +70,7 @@ public class ExchangeRateControllerTest {
     public void testShow_NoDataFound() throws Exception {
         List<ExchangeRateDto> expectedExchangeRateDtos = new ArrayList<>();
 
-        when(exchangeRateService.getLatestExchangeRates()).thenReturn(expectedExchangeRateDtos);
+        when(exchangeRateService.get()).thenReturn(expectedExchangeRateDtos);
 
         MvcResult result = mockMvc.perform(get("/api/exchange-rates")
                 .contentType(MediaType.APPLICATION_JSON))

@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -18,5 +19,6 @@ public interface CurrencyRepository extends JpaRepository<Currency, Long> {
      *         are found.
      */
     @Query("SELECT c FROM Currency c WHERE c.code IN :currencyCodes")
-    List<Currency> findAllByCodeIn(List<String> currencyCodes);
+    @NonNull
+    List<Currency> findAll(List<String> currencyCodes);
 }

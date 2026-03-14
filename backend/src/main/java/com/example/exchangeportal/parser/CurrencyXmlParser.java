@@ -13,56 +13,37 @@ import java.util.ArrayList;
 import java.util.List;
 import org.xml.sax.SAXException;
 
-import com.example.exchangeportal.entity.Currency;
-import com.example.exchangeportal.exception.FailedParsingException;
+import com.example.exchangeportal.record.CurrencyClientResponse;
+import com.example.exchangeportal.record.ParsedCurrency;
 
 @Component
 public class CurrencyXmlParser {
 
-    public List<Currency> parseAll(String xmlData) throws FailedParsingException {
-        Document document = buildDocumentFromXml(xmlData);
-        return extractCurrencies(document);
-    }
-
-    protected Document buildDocumentFromXml(String xmlData) throws FailedParsingException {
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder;
-
-        try {
-            builder = factory.newDocumentBuilder();
-        } catch (ParserConfigurationException e) {
-            throw new RuntimeException("Error while configuring xml parser", e);
-        }
-
-        Document document;
-        try {
-            document = builder.parse(new ByteArrayInputStream(xmlData.getBytes()));
-        } catch (SAXException | IOException e) {
-            throw new FailedParsingException("Error occurred while parsing the xml data.", e);
-        }
-        document.getDocumentElement().normalize();
-        return document;
-    }
-
-    protected List<Currency> extractCurrencies(Document document) {
-        List<Currency> currencies = new ArrayList<>();
+    public List<ParsedCurrency> parse(CurrencyClientResponse response)
+            throws ParserConfigurationException, SAXException, IOException {
+        Document document = parse(response.xmlData());
+        List<ParsedCurrency> currencies = new ArrayList<>();
         NodeList nodeList = document.getElementsByTagName("CcyNtry");
         for (int i = 0; i < nodeList.getLength(); i++) {
             Element element = (Element) nodeList.item(i);
-            currencies.add(parseCurrencyElement(element));
+            currencies.add(parse(element));
         }
         return currencies;
     }
 
-    private Currency parseCurrencyElement(Element element) {
+    private Document parse(String xmlData) throws ParserConfigurationException, SAXException, IOException {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        Document document = builder.parse(new ByteArrayInputStream(xmlData.getBytes()));
+        document.getDocumentElement().normalize();
+        return document;
+    }
+
+    private ParsedCurrency parse(Element element) {
         String code = element.getElementsByTagName("Ccy").item(0).getTextContent();
         String name = element.getElementsByTagName("CcyNm").item(1).getTextContent();
         int minorUnits = Integer.parseInt(element.getElementsByTagName("CcyMnrUnts").item(0).getTextContent());
 
-        return Currency.builder()
-                .code(code)
-                .name(name)
-                .minorUnits(minorUnits)
-                .build();
+        return new ParsedCurrency(code, name, minorUnits);
     }
 }
